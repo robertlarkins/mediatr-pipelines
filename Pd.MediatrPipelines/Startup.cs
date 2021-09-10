@@ -1,4 +1,5 @@
 using Autofac;
+using MediatR;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Pd.MediatrPipelines.PipelineBehaviors;
 
 namespace Pd.MediatrPipelines
 {
@@ -21,12 +23,15 @@ namespace Pd.MediatrPipelines
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pd.MediatrPipelines", Version = "v1" });
             });
+
+            // https://codewithmukesh.com/blog/mediatr-pipeline-behaviour/
+            // https://garywoodfine.com/how-to-use-mediatr-pipeline-behaviours/
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

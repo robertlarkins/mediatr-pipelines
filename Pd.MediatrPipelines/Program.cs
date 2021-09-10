@@ -2,6 +2,7 @@ using System.IO;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Pd.MediatrPipelines
 {
@@ -9,6 +10,14 @@ namespace Pd.MediatrPipelines
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .CreateLogger();
+
+            Log.Information("Hello world!");
+
             CreateHostBuilder(args).Build().Run();
         }
 
